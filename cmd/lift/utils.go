@@ -4,6 +4,8 @@ import (
 	"os"
 	"path"
 	"runtime"
+
+	lift "github.com/liftbridge-io/go-liftbridge"
 )
 
 func getHomeDir() string {
@@ -18,4 +20,8 @@ func getHomeDir() string {
 	}
 
 	return path.Clean(home)
+}
+
+func getClient(cfg Config) (lift.Client, error) {
+	return lift.Connect(cfg.Server.Addresses)
 }
