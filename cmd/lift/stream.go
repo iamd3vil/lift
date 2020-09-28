@@ -31,6 +31,11 @@ func (h *Hub) Streams() *cli.Command {
 						Required: true,
 						Usage:    "Nats Subject",
 					},
+					&cli.IntFlag{
+						Name:    "partitions",
+						Aliases: []string{"p"},
+						Usage:   "Number of partitions",
+					},
 				},
 			},
 		},
@@ -41,11 +46,13 @@ func (h *Hub) Streams() *cli.Command {
 
 func (h *Hub) createStream(ctx *cli.Context) error {
 	streamName := ctx.String("stream")
+	partitions := int32(ctx.Int("partitions"))
 	c, err := lift.Connect(h.cfg.Server.Addresses)
 	if err != nil {
 		return err
 	}
-	err = c.CreateStream(ctx.Context, ctx.String("subject"), ctx.String("stream"))
+	defer c.Close()
+	err = c.CreateStream(ctx.Context, ctx.String("subject"), ctx.String("stream"), lift.Partitions(partitions))
 	if err != nil {
 		if err == lift.ErrStreamExists {
 			return fmt.Errorf("error while creating a stream: stream %v already exists", streamName)
