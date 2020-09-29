@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"bufio"
+	"os"
 
 	"github.com/liftbridge-io/go-liftbridge"
 	cli "github.com/urfave/cli/v2"
@@ -39,16 +40,9 @@ func (h *Hub) publishStream(ctx *cli.Context) error {
 	}
 	defer c.Close()
 
-	var (
-		val string
-	)
-
-	for {
-		if _, err := fmt.Scanln(&val); err != nil {
-			h.logger.Errorf("error while reading input: %v", err)
-			break
-		}
-		if _, err := c.Publish(ctx.Context, stream, []byte(val), liftbridge.ToPartition(partition)); err != nil {
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		if _, err := c.Publish(ctx.Context, stream, []byte(scanner.Text()), liftbridge.ToPartition(partition)); err != nil {
 			return err
 		}
 	}
