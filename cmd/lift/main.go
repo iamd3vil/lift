@@ -61,6 +61,7 @@ func main() {
 	// Register commands.
 	app.Commands = []*cli.Command{
 		hub.Streams(),
+		hub.initCommand(),
 	}
 
 	// Run the app.

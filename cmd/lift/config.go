@@ -9,6 +9,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const defaultConfig = `
+[servers]
+addresses = ["localhost:9292"]
+`
+
 type cfgServers struct {
 	Addresses []string `koanf:"addresses"`
 }
