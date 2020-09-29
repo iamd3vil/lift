@@ -10,7 +10,7 @@ func (h *Hub) subscribeCommand() *cli.Command {
 		Name:     "subscribe",
 		Aliases:  []string{"sb"},
 		Action:   h.MustHaveConfig(h.subscribeStream),
-		Usage:    "subscribe from a stream",
+		Usage:    "Subscribe from a stream",
 		Category: "stream",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
