@@ -25,7 +25,7 @@ func initConfig(logger *logrus.Logger) (Config, error) {
 
 	cfgPath := path.Join(getHomeDir(), ".config", "lift", "config.toml")
 
-	logger.Printf("reading config: %s", cfgPath)
+	logger.Debugf("reading config: %s", cfgPath)
 
 	if err := ko.Load(file.Provider(cfgPath), toml.Parser()); err != nil {
 		logger.Fatalf("error reading config: %v", err)

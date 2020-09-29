@@ -9,12 +9,11 @@ import (
 
 func (h *Hub) createStreamCommand() *cli.Command {
 	return &cli.Command{
-		Name:      "create",
-		Aliases:   []string{"c"},
-		Action:    h.MustHaveConfig(h.createStream),
-		ArgsUsage: "[STREAMNAME]",
-		Usage:     "Create a stream",
-		Category:  "stream",
+		Name:     "create",
+		Aliases:  []string{"c"},
+		Action:   h.MustHaveConfig(h.createStream),
+		Usage:    "Create a stream",
+		Category: "stream",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     "stream",
