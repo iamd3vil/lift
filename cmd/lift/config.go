@@ -1,8 +1,6 @@
 package main
 
 import (
-	"path"
-
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/toml"
 	"github.com/knadh/koanf/providers/file"
@@ -22,13 +20,11 @@ type Config struct {
 	Server cfgServers
 }
 
-func initConfig(logger *logrus.Logger) (Config, error) {
+func initConfig(logger *logrus.Logger, cfgPath string) (Config, error) {
 	var (
 		cfg = Config{}
 		ko  = koanf.New(".")
 	)
-
-	cfgPath := path.Join(getHomeDir(), ".config", "lift", "config.toml")
 
 	logger.Debugf("reading config: %s", cfgPath)
 

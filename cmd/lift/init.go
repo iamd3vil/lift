@@ -17,12 +17,14 @@ func (h *Hub) initCommand() *cli.Command {
 }
 
 func (h *Hub) initConfig(ctx *cli.Context) error {
-	cfgPath := path.Join(getHomeDir(), ".config", "lift", "config.toml")
-	_, err := os.Stat(cfgPath)
+	if configPath == "" {
+		configPath = path.Join(getHomeDir(), ".config", "lift", "config.toml")
+	}
+	_, err := os.Stat(configPath)
 	if err != nil {
 		if os.IsNotExist(err) {
-			os.MkdirAll(path.Join(getHomeDir(), ".config", "lift"), 0750)
-			f, err := os.Create(cfgPath)
+			os.MkdirAll(path.Dir(configPath), 0750)
+			f, err := os.Create(configPath)
 			if err != nil {
 				return err
 			}
@@ -34,6 +36,6 @@ func (h *Hub) initConfig(ctx *cli.Context) error {
 		}
 		return err
 	}
-	h.logger.Infof("Config at %v already exists", cfgPath)
+	h.logger.Infof("Config at %v already exists", configPath)
 	return nil
 }

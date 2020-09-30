@@ -12,22 +12,19 @@ var (
 	// Version and date of the build. This is injected at build-time.
 	buildVersion = "unknown"
 	buildDate    = "unknown"
+	configPath   string
+	verbose      bool
 )
 
 // initLogger initializes logger
-func initLogger(verbose bool) *logrus.Logger {
+func initLogger() *logrus.Logger {
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.TextFormatter{
 		FullTimestamp: true,
 	})
 
 	// Set logger level
-	if verbose {
-		logger.SetLevel(logrus.DebugLevel)
-		logger.Debug("verbose logging enabled")
-	} else {
-		logger.SetLevel(logrus.InfoLevel)
-	}
+	logger.SetLevel(logrus.InfoLevel)
 
 	return logger
 }
@@ -46,16 +43,31 @@ func main() {
 	// Register command line args.
 	app.Flags = []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "verbose",
-			Usage: "Enable verbose logging",
+			Name:        "verbose",
+			Usage:       "Enable verbose logging",
+			Destination: &verbose,
+		},
+		&cli.StringFlag{
+			Name:        "config",
+			Aliases:     []string{"c"},
+			Usage:       "Configuration Path",
+			Destination: &configPath,
 		},
 	}
 
-	logger := initLogger(true)
+	logger := initLogger()
 
 	hub, err := NewHub(logger)
 	if err != nil {
 		logger.Fatalf("error initializing hub: %v", err)
+	}
+
+	app.Before = func(ctx *cli.Context) error {
+		if verbose {
+			hub.logger.SetLevel(logrus.DebugLevel)
+			hub.logger.Debug("verbose logging enabled")
+		}
+		return nil
 	}
 
 	// Register commands.
