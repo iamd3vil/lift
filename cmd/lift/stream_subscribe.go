@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/liftbridge-io/go-liftbridge"
+	"github.com/liftbridge-io/go-liftbridge/v2"
 	cli "github.com/urfave/cli/v2"
 )
 

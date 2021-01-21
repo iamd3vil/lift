@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	lift "github.com/liftbridge-io/go-liftbridge"
+	lift "github.com/liftbridge-io/go-liftbridge/v2"
 	"github.com/urfave/cli/v2"
 )
 

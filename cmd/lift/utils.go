@@ -5,7 +5,7 @@ import (
 	"path"
 	"runtime"
 
-	lift "github.com/liftbridge-io/go-liftbridge"
+	lift "github.com/liftbridge-io/go-liftbridge/v2"
 )
 
 func getHomeDir() string {
