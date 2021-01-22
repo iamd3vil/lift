@@ -45,22 +45,11 @@ func (h *Hub) describeStream(ctx *cli.Context) error {
 	table.SetBorder(false)
 	table.SetHeader([]string{"Partition", "HighWaterMark", "Newest Offset", "Replicas", "In Sync Replicas"})
 	for _, info := range streamInfo.Partitions() {
-		// TODO: Change this to metadata from `info` when the bug in liftbridge client is fixed.
-		// No need to fetch partition metadata again
-		pMeta, err := c.FetchPartitionMetadata(ctx.Context, stream, info.ID())
-		if err != nil {
-			return err
-		}
-		partitionID := fmt.Sprintf("%d", pMeta.ID())
-		hw := fmt.Sprintf("%d", pMeta.HighWatermark())
-		offset := fmt.Sprintf("%d", pMeta.NewestOffset())
-		replicas := fmt.Sprintf("[%d]", len(pMeta.Replicas()))
-		isr := fmt.Sprintf("[%d]", len(pMeta.ISR()))
-		// partitionID := fmt.Sprintf("%d", info.ID())
-		// hw := fmt.Sprintf("%d", info.HighWatermark())
-		// offset := fmt.Sprintf("%d", info.NewestOffset())
-		// replicas := fmt.Sprintf("[%d]", len(info.Replicas()))
-		// isr := fmt.Sprintf("[%d]", len(info.ISR()))
+		partitionID := fmt.Sprintf("%d", info.ID())
+		hw := fmt.Sprintf("%d", info.HighWatermark())
+		offset := fmt.Sprintf("%d", info.NewestOffset())
+		replicas := fmt.Sprintf("[%d]", len(info.Replicas()))
+		isr := fmt.Sprintf("[%d]", len(info.ISR()))
 
 		table.Append([]string{partitionID, hw, offset, replicas, isr})
 	}
