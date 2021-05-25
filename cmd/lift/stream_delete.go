@@ -26,6 +26,7 @@ func (h *Hub) deleteStream(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
+	defer c.Close()
 
 	if err := c.DeleteStream(ctx.Context, stream); err != nil {
 		return err
