@@ -11,7 +11,7 @@ import (
 func (h *Hub) publishStreamCommand() *cli.Command {
 	return &cli.Command{
 		Name:     "publish",
-		Aliases:  []string{"p"},
+		Aliases:  []string{"p", "pub"},
 		Action:   h.MustHaveConfig(h.publishStream),
 		Usage:    "Publish to a stream",
 		Category: "stream",
