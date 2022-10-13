@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	lift "github.com/liftbridge-io/go-liftbridge/v2"
 	"github.com/urfave/cli/v2"
@@ -32,6 +33,12 @@ func (h *Hub) createStreamCommand() *cli.Command {
 				Aliases: []string{"p"},
 				Usage:   "Number of partitions",
 			},
+			&cli.DurationFlag{
+				Name:    "retention",
+				Aliases: []string{"r"},
+				Usage:   "Retention for the stream",
+				Value:   7 * 24 * time.Hour,
+			},
 		},
 	}
 }
@@ -39,12 +46,20 @@ func (h *Hub) createStreamCommand() *cli.Command {
 func (h *Hub) createStream(ctx *cli.Context) error {
 	streamName := ctx.String("stream")
 	partitions := int32(ctx.Int("partitions"))
+	retention := ctx.Duration("retention")
 	c, err := getClient(h.cfg)
 	if err != nil {
 		return err
 	}
 	defer c.Close()
-	err = c.CreateStream(ctx.Context, ctx.String("subject"), ctx.String("stream"), lift.Partitions(partitions))
+
+	opts := []lift.StreamOption{
+		lift.Partitions(partitions),
+		lift.RetentionMaxAge(retention),
+	}
+
+	err = c.CreateStream(ctx.Context, ctx.String("subject"),
+		ctx.String("stream"), opts...)
 	if err != nil {
 		if err == lift.ErrStreamExists {
 			return fmt.Errorf("error while creating a stream: stream %v already exists", streamName)
