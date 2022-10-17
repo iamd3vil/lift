@@ -14,6 +14,7 @@ func (h *Hub) Streams() *cli.Command {
 			h.publishStreamCommand(),
 			h.describeCommand(),
 			h.pauseStreamCommand(),
+			h.setCursorCommand(),
 		},
 		Aliases: []string{"s"},
 		Usage:   "Commands about creating/deleting/consuming from streams",
